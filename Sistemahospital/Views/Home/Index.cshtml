@@ -1,0 +1,128 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h4><i class="fas fa-tachometer-alt"></i> Dashboard</h4>
+        <small>Bienvenido, @Session["Username"] | @Session["NombreRol"]</small>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="stat-card bg-azul">
+            <i class="fas fa-user-injured"></i>
+            <div class="stat-info">
+                <h3>@ViewBag.TotalPacientes</h3>
+                <p>Pacientes Registrados</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-verde">
+            <i class="fas fa-user-md"></i>
+            <div class="stat-info">
+                <h3>@ViewBag.TotalMedicos</h3>
+                <p>Medicos Activos</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-naranja">
+            <i class="fas fa-calendar-check"></i>
+            <div class="stat-info">
+                <h3>@ViewBag.TotalCitas</h3>
+                <p>Citas Pendientes</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-rojo">
+            <i class="fas fa-file-invoice-dollar"></i>
+            <div class="stat-info">
+                <h3>@ViewBag.TotalPagos</h3>
+                <p>Pagos Pendientes</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header" style="background-color:#003876; color:white; font-size:13px;">
+                <i class="fas fa-calendar-alt"></i> Proximas Citas Pendientes
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Paciente</th>
+                            <th>Medico</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.ProximasCitas != null && ViewBag.ProximasCitas.Count > 0)
+                        {
+                            foreach (var cita in ViewBag.ProximasCitas)
+                            {
+                                <tr>
+                                    <td>@cita.NombrePaciente</td>
+                                    <td>@cita.NombreMedico</td>
+                                    <td>@cita.FechaHora.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td><span class="badge bg-warning text-dark">Pendiente</span></td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center text-muted py-3">No hay citas pendientes</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header" style="background-color:#003876; color:white; font-size:13px;">
+                <i class="fas fa-file-invoice-dollar"></i> Pagos Pendientes Recientes
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Paciente</th>
+                            <th>Tratamiento</th>
+                            <th>Monto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.PagosPendientes != null && ViewBag.PagosPendientes.Count > 0)
+                        {
+                            foreach (var pago in ViewBag.PagosPendientes)
+                            {
+                                <tr>
+                                    <td>@pago.NombrePaciente</td>
+                                    <td>@pago.DescripcionTratamiento</td>
+                                    <td>₡@pago.Monto.ToString("N2")</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3" class="text-center text-muted py-3">No hay pagos pendientes</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

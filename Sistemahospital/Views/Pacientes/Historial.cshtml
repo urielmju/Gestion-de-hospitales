@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "Historial Medico";
+    var paciente = ViewBag.Paciente as Sistemahospital.Models.Paciente;
+}
+
+<div class="page-header">
+    <h4><i class="fas fa-file-medical"></i> Historial Medico</h4>
+    <small><a href="@Url.Action("Index")">Pacientes</a> / Historial</small>
+</div>
+
+@if (paciente != null)
+{
+    <div class="alert" style="background-color:#e8f0fb; border-left:4px solid #003876;">
+        <strong>Paciente:</strong> @paciente.Nombre @paciente.Apellido |
+        <strong>Hospital:</strong> @paciente.NombreHospital |
+        <strong>Telefono:</strong> @paciente.Telefono
+    </div>
+}
+
+<div class="text-center mt-3">
+    <a href="@Url.Action("HistorialMedico", "Reportes", new { idPaciente = ViewBag.Paciente?.IDPaciente })"
+       class="btn btn-primary">
+        <i class="fas fa-search"></i> Ver Historial Completo
+    </a>
+    <a href="@Url.Action("Index")" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Volver
+    </a>
+</div>

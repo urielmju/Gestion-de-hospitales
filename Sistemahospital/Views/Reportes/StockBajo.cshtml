@@ -1,0 +1,76 @@
+﻿@using System.Data
+@{
+    ViewBag.Title = "Stock Bajo";
+    DataTable tabla = ViewBag.Tabla as DataTable;
+}
+
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h4><i class="fas fa-exclamation-triangle"></i> Reporte de Stock Bajo</h4>
+        <small>Medicamentos con stock por debajo del minimo</small>
+    </div>
+</div>
+
+@using (Html.BeginForm("StockBajo", "Reportes", FormMethod.Get))
+{
+    <div class="card mb-3">
+        <div class="card-body py-2">
+            <div class="row g-2 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label mb-1" style="font-size:12px;">Hospital</label>
+                    <select name="idHospital" class="form-select form-select-sm">
+                        <option value="1" @(ViewBag.IDHospital == 1 ? "selected" : "")>Hospital Central San Jose</option>
+                        <option value="2" @(ViewBag.IDHospital == 2 ? "selected" : "")>Hospital Metropolitano</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label mb-1" style="font-size:12px;">Stock Minimo</label>
+                    <input type="number" name="stockMinimo" value="@ViewBag.StockMinimo" class="form-control form-control-sm" />
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-search"></i> Consultar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Medicamento</th>
+                    <th>Stock Actual</th>
+                    <th>Costo/Unidad</th>
+                    <th>Alerta</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (tabla != null && tabla.Rows.Count > 0)
+                {
+                    foreach (DataRow row in tabla.Rows)
+                    {
+                        <tr>
+                            <td>@row["NombreMedicamento"]</td>
+                            <td>@row["StockActual"]</td>
+                            <td>₡@string.Format("{0:N2}", row["CostoPorUnidad"])</td>
+                            <td>
+                                @{
+                                    var alerta = row["Alerta"].ToString();
+                                    var badge = alerta.Contains("CRITICO") ? "bg-danger" :
+                                                alerta.Contains("URGENTE") ? "bg-warning text-dark" : "bg-info text-dark";
+                                }
+                                <span class="badge @badge">@alerta</span>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr><td colspan="4" class="text-center text-muted py-3">No hay medicamentos con stock bajo</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

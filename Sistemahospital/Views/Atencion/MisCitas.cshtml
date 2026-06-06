@@ -1,0 +1,55 @@
+﻿@model List<Sistemahospital.Models.Cita>
+@{
+    ViewBag.Title = "Mis Citas";
+}
+
+<div class="page-header">
+    <h4><i class="fas fa-calendar-check"></i> Mis Citas Pendientes</h4>
+    <small>Citas asignadas para atender</small>
+</div>
+
+@if (TempData["Exito"] != null)
+{
+    <div class="alert alert-success">@TempData["Exito"]</div>
+}
+
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Paciente</th>
+                    <th>Hospital</th>
+                    <th>Fecha y Hora</th>
+                    <th>Estado</th>
+                    <th>Accion</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count == 0)
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-3">No hay citas pendientes</td>
+                    </tr>
+                }
+                @foreach (var c in Model)
+                {
+                    <tr>
+                        <td>@c.IDCita</td>
+                        <td>@c.NombrePaciente</td>
+                        <td>@c.NombreHospital</td>
+                        <td>@c.FechaHora.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td><span class="badge bg-warning text-dark">Pendiente</span></td>
+                        <td>
+                            <a href="@Url.Action("Atender", new { idCita = c.IDCita })"
+                               class="btn btn-sm btn-primary">
+                                <i class="fas fa-stethoscope"></i> Atender
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

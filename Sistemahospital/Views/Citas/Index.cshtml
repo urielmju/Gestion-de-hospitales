@@ -1,0 +1,72 @@
+﻿@model List<Sistemahospital.Models.Cita>
+@{
+    ViewBag.Title = "Citas";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h4><i class="fas fa-calendar-alt"></i> Gestion de Citas</h4>
+        <small>Listado de citas registradas</small>
+    </div>
+    <a href="@Url.Action("Crear")" class="btn btn-sm" style="background-color:#003876; color:white;">
+        <i class="fas fa-plus"></i> Nueva Cita
+    </a>
+</div>
+
+@if (TempData["Exito"] != null)
+{
+    <div class="alert alert-success">@TempData["Exito"]</div>
+}
+
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Paciente</th>
+                    <th>Medico</th>
+                    <th>Hospital</th>
+                    <th>Fecha y Hora</th>
+                    <th>Diagnostico</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var c in Model)
+                {
+                    <tr>
+                        <td>@c.IDCita</td>
+                        <td>@c.NombrePaciente</td>
+                        <td>@c.NombreMedico</td>
+                        <td>@c.NombreHospital</td>
+                        <td>@c.FechaHora.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@(string.IsNullOrEmpty(c.Diagnostico) ? "-" : c.Diagnostico)</td>
+                        <td>
+                            @if (c.Estado == "P")
+                            {
+                                <span class="badge bg-warning text-dark">Pendiente</span>
+                            }
+                            else if (c.Estado == "C")
+                            {
+                                <span class="badge bg-success">Completada</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Cancelada</span>
+                            }
+                        </td>
+                        <td>
+                            @if (c.Estado == "P")
+                            {
+                                <a href="@Url.Action("Editar", new { id = c.IDCita })" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+                                <a href="@Url.Action("Cancelar", new { id = c.IDCita })" class="btn btn-danger btn-sm" onclick="return confirm('Desea cancelar esta cita?')"><i class="fas fa-times"></i></a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

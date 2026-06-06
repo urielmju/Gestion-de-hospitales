@@ -1,0 +1,56 @@
+﻿@model Sistemahospital.Models.Paciente
+@{
+    ViewBag.Title = "Editar Paciente";
+}
+
+<div class="page-header">
+    <h4><i class="fas fa-user-edit"></i> Editar Paciente</h4>
+    <small><a href="@Url.Action("Index")">Pacientes</a> / Editar</small>
+</div>
+
+<div class="card" style="max-width:700px;">
+    <div class="card-body">
+        @using (Html.BeginForm("Editar", "Pacientes", FormMethod.Post))
+        {
+            <input type="hidden" name="IDPaciente" value="@Model.IDPaciente" />
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" name="Nombre" value="@Model.Nombre" class="form-control" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Apellido</label>
+                    <input type="text" name="Apellido" value="@Model.Apellido" class="form-control" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Fecha de Nacimiento</label>
+                    <input type="date" name="FechaNacimiento" value="@Model.FechaNacimiento.ToString("yyyy-MM-dd")" class="form-control" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Genero</label>
+                    <select name="Genero" class="form-select">
+                        <option value="M" @(Model.Genero == "M" ? "selected" : "")>Masculino</option>
+                        <option value="F" @(Model.Genero == "F" ? "selected" : "")>Femenino</option>
+                        <option value="O" @(Model.Genero == "O" ? "selected" : "")>Otro</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Telefono</label>
+                    <input type="text" name="Telefono" value="@Model.Telefono" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="Email" value="@Model.Email" class="form-control" />
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">Direccion</label>
+                    <input type="text" name="Direccion" value="@Model.Direccion" class="form-control" />
+                </div>
+            </div>
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+                <a href="@Url.Action("Index")" class="btn btn-secondary">Cancelar</a>
+            </div>
+        }
+    </div>
+</div>

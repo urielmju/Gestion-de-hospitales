@@ -1,0 +1,78 @@
+﻿@model List<Sistemahospital.Models.Medicamento>
+@{
+    ViewBag.Title = "Medicamentos";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h4><i class="fas fa-pills"></i> Inventario de Medicamentos</h4>
+        <small>Stock por hospital</small>
+    </div>
+    <div>
+        @using (Html.BeginForm("Index", "Medicamentos", FormMethod.Get))
+        {
+            <select name="idHospital" class="form-select form-select-sm d-inline w-auto" onchange="this.form.submit()">
+                <option value="1" @(ViewBag.IDHospital == 1 ? "selected" : "")>Hospital Central San Jose</option>
+                <option value="2" @(ViewBag.IDHospital == 2 ? "selected" : "")>Hospital Metropolitano</option>
+            </select>
+        }
+    </div>
+</div>
+
+@if (TempData["Exito"] != null)
+{
+    <div class="alert alert-success">@TempData["Exito"]</div>
+}
+
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripcion</th>
+                    <th>Costo/Unidad</th>
+                    <th>Unidad</th>
+                    <th>Stock</th>
+                    <th>Actualizar Stock</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var m in Model)
+                {
+                    <tr>
+                        <td>@m.IDMedicamento</td>
+                        <td>@m.Nombre</td>
+                        <td>@m.Descripcion</td>
+                        <td>₡@m.CostoPorUnidad.ToString("N2")</td>
+                        <td>@m.UnidadMedida</td>
+                        <td>
+                            @if (m.StockHospital <= 20)
+                            {
+                                <span class="badge bg-danger">@m.StockHospital</span>
+                            }
+                            else if (m.StockHospital <= 50)
+                            {
+                                <span class="badge bg-warning text-dark">@m.StockHospital</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">@m.StockHospital</span>
+                            }
+                        </td>
+                        <td>
+                            @using (Html.BeginForm("ActualizarStock", "Medicamentos", FormMethod.Post, new { style = "display:inline;" }))
+                            {
+                                <input type="hidden" name="idMedicamento" value="@m.IDMedicamento" />
+                                <input type="hidden" name="idHospital" value="@ViewBag.IDHospital" />
+                                <input type="number" name="cantidad" value="@m.StockHospital" class="form-control form-control-sm d-inline" style="width:80px;" min="0" />
+                                <button type="submit" class="btn btn-primary btn-sm ms-1"><i class="fas fa-save"></i></button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

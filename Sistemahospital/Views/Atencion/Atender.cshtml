@@ -1,0 +1,176 @@
+﻿@model Sistemahospital.Models.AtencionViewModel
+@{
+    ViewBag.Title = "Atender Paciente";
+}
+
+<div class="page-header">
+    <h4><i class="fas fa-stethoscope"></i> Atender Paciente</h4>
+    <small><a href="@Url.Action("MisCitas")">Mis Citas</a> / Atender</small>
+</div>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<!-- datos del paciente -->
+<div class="card mb-3">
+    <div class="card-header" style="background-color:#003876; color:white; font-size:13px;">
+        <i class="fas fa-user-injured"></i> Datos del Paciente
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <small class="text-muted">Nombre</small>
+                <p class="mb-1"><strong>@Model.Paciente.Nombre @Model.Paciente.Apellido</strong></p>
+            </div>
+            <div class="col-md-3">
+                <small class="text-muted">Fecha Nacimiento</small>
+                <p class="mb-1">@Model.Paciente.FechaNacimiento.ToString("dd/MM/yyyy")</p>
+            </div>
+            <div class="col-md-3">
+                <small class="text-muted">Telefono</small>
+                <p class="mb-1">@Model.Paciente.Telefono</p>
+            </div>
+            <div class="col-md-3">
+                <small class="text-muted">Hospital</small>
+                <p class="mb-1">@Model.Cita.NombreHospital</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("Atender", "Atencion", FormMethod.Post))
+{
+    <input type="hidden" name="idCita" value="@Model.Cita.IDCita" />
+    <input type="hidden" name="idPaciente" value="@Model.Cita.IDPaciente" />
+    <input type="hidden" name="idHospital" value="@Model.Cita.IDHospital" />
+
+    <!-- diagnostico -->
+    <div class="card mb-3">
+        <div class="card-header" style="background-color:#003876; color:white; font-size:13px;">
+            <i class="fas fa-notes-medical"></i> Diagnostico y Tratamiento
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-12">
+                    <label class="form-label">Diagnostico <small class="text-muted">(max 500 caracteres)</small></label>
+                    <textarea name="diagnostico" class="form-control" rows="3"
+                              maxlength="500" required
+                              placeholder="Describa el diagnostico del paciente..."></textarea>
+                </div>
+                <div class="col-md-9">
+                    <label class="form-label">Descripcion del Tratamiento</label>
+                    <input type="text" name="descripcionTratamiento" class="form-control" required
+                           placeholder="Descripcion general del tratamiento..." />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Costo Total (₡)</label>
+                    <input type="text" name="costoTotal" id="costoTotal"
+                           value="0.00" readonly class="form-control"
+                           style="background-color:#f8f9fa; font-weight:bold;" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- prescripciones -->
+    <div class="card mb-3">
+        <div class="card-header" style="background-color:#003876; color:white; font-size:13px;">
+            <i class="fas fa-pills"></i> Medicamentos a Recetar
+        </div>
+        <div class="card-body p-0">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>Medicamento</th>
+                        <th>Stock</th>
+                        <th>Costo/Unidad</th>
+                        <th>Cantidad</th>
+                        <th>Dosis</th>
+                        <th>Frecuencia</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.MedicamentosDisponibles.Count; i++)
+                    {
+                        var med = Model.MedicamentosDisponibles[i];
+                        <tr>
+                            <td>
+                                @med.Nombre
+                                <input type="hidden" name="idsMedicamento" value="@med.IDMedicamento" />
+                            </td>
+                            <td>
+                                @if (med.StockHospital <= 20)
+                                {
+                                    <span class="badge bg-danger">@med.StockHospital</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">@med.StockHospital</span>
+                                }
+                            </td>
+                            <td>₡@med.CostoPorUnidad.ToString("N2")</td>
+                            <td>
+                                <input type="number" name="cantidades" value="0" min="0"
+                                       max="@med.StockHospital"
+                                       class="form-control form-control-sm cantidad-input"
+                                       style="width:70px;"
+                                       data-costo="@med.CostoPorUnidad" />
+                            </td>
+                            <td>
+                                <input type="text" name="dosis" class="form-control form-control-sm"
+                                       style="width:100px;" placeholder="ej: 500mg" />
+                            </td>
+                            <td>
+                                <input type="text" name="frecuencias" class="form-control form-control-sm"
+                                       style="width:120px;" placeholder="ej: cada 8h" />
+                            </td>
+                            <td>
+                                <span class="subtotal" data-index="@i">₡0.00</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6" class="text-end"><strong>Total Medicamentos:</strong></td>
+                        <td><strong id="totalMed">₡0.00</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <button type="submit" class="btn btn-success"
+                onclick="return confirm('Confirmar atencion? Se generara un pago pendiente para el paciente.')">
+            <i class="fas fa-check-circle"></i> Finalizar Atencion
+        </button>
+        <a href="@Url.Action("MisCitas")" class="btn btn-secondary">Cancelar</a>
+    </div>
+}
+
+<script>
+    function recalcularTotal() {
+        var total = 0;
+        var inputs = document.querySelectorAll('.cantidad-input');
+        var subtotales = document.querySelectorAll('.subtotal');
+
+        inputs.forEach(function (input, index) {
+            var costo = parseFloat(input.dataset.costo) || 0;
+            var cantidad = parseInt(input.value) || 0;
+            var subtotal = costo * cantidad;
+            subtotales[index].textContent = '₡' + subtotal.toFixed(2);
+            total += subtotal;
+        });
+
+        document.getElementById('totalMed').textContent = '₡' + total.toFixed(2);
+        document.getElementById('costoTotal').value = total.toFixed(2);
+    }
+
+    document.querySelectorAll('.cantidad-input').forEach(function (input) {
+        input.addEventListener('input', recalcularTotal);
+    });
+</script>

@@ -1,0 +1,160 @@
+﻿@using System.Collections.Generic
+@using Sistemahospital.Models
+@{
+    ViewBag.Title = "Reportes";
+}
+
+<div class="page-header">
+    <h4><i class="fas fa-chart-bar"></i> Reportes</h4>
+    <small>Consultas avanzadas del sistema</small>
+</div>
+
+<div class="row g-3">
+    <!-- reporte 1 -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header" style="background-color:#003876; color:white; font-size:13px;">
+                <i class="fas fa-user-md"></i> Pacientes por Medico en Rango de Fechas
+            </div>
+            <div class="card-body">
+                @using (Html.BeginForm("PacientesPorMedico", "Reportes", FormMethod.Post))
+                {
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <label class="form-label">ID Medico</label>
+                            <input type="number" name="idMedico" class="form-control form-control-sm" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Hospital</label>
+                            <select name="idHospital" class="form-select form-select-sm">
+                                <option value="1">Hospital Central San Jose</option>
+                                <option value="2">Hospital Metropolitano</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Fecha Inicio</label>
+                            <input type="date" name="fechaInicio" class="form-control form-control-sm" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Fecha Fin</label>
+                            <input type="date" name="fechaFin" class="form-control form-control-sm" required />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-sm mt-2">
+                        <i class="fas fa-search"></i> Consultar
+                    </button>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- reporte 2 -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header" style="background-color:#003876; color:white; font-size:13px;">
+                <i class="fas fa-file-invoice-dollar"></i> Pagos de Paciente en Rango de Fechas
+            </div>
+            <div class="card-body">
+                @using (Html.BeginForm("PagosPaciente", "Reportes", FormMethod.Post))
+                {
+                    <div class="row g-2">
+                        <div class="col-md-12">
+                            <label class="form-label">ID Paciente</label>
+                            <input type="number" name="idPaciente" class="form-control form-control-sm" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Fecha Inicio</label>
+                            <input type="date" name="fechaInicio" class="form-control form-control-sm" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Fecha Fin</label>
+                            <input type="date" name="fechaFin" class="form-control form-control-sm" required />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-sm mt-2">
+                        <i class="fas fa-search"></i> Consultar
+                    </button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- resultados -->
+@if (ViewBag.Tipo == "PacientesPorMedico" && ViewBag.Resultados != null)
+{
+    <div class="card mt-3">
+        <div class="card-header" style="background-color:#003876; color:white; font-size:13px;">
+            Resultados - Pacientes por Medico
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>ID Paciente</th>
+                        <th>Nombre</th>
+                        <th>Fecha Cita</th>
+                        <th>Diagnostico</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Cita c in ViewBag.Resultados)
+                    {
+                        <tr>
+                            <td>@c.IDPaciente</td>
+                            <td>@c.NombrePaciente</td>
+                            <td>@c.FechaHora.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@c.Diagnostico</td>
+                            <td>@c.Estado</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Tipo == "PagosPaciente" && ViewBag.Resultados != null)
+{
+    <div class="card mt-3">
+        <div class="card-header" style="background-color:#003876; color:white; font-size:13px;">
+            Resultados - Pagos del Paciente
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Paciente</th>
+                        <th>Tratamiento</th>
+                        <th>Hospital</th>
+                        <th>Fecha</th>
+                        <th>Monto</th>
+                        <th>Metodo</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Pago p in ViewBag.Resultados)
+                    {
+                        <tr>
+                            <td>@p.IDPago</td>
+                            <td>@p.NombrePaciente</td>
+                            <td>@p.DescripcionTratamiento</td>
+                            <td>@p.NombreHospital</td>
+                            <td>@p.Fecha.ToString("dd/MM/yyyy")</td>
+                            <td>₡@p.Monto.ToString("N2")</td>
+                            <td>@p.MetodoPago</td>
+                            <td>@p.Estado</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="p-3 border-top">
+                <strong>Total Pagado: ₡@ViewBag.TotalPagado.ToString("N2")</strong> |
+                <strong>Total Pendiente: ₡@ViewBag.TotalPendiente.ToString("N2")</strong>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,70 @@
+﻿@using System.Data
+@{
+    ViewBag.Title = "Historial Medico";
+    DataTable tabla = ViewBag.Tabla as DataTable;
+}
+
+<div class="page-header">
+    <h4><i class="fas fa-file-medical"></i> Historial Medico de Paciente</h4>
+    <small>Consulta el historial completo de un paciente</small>
+</div>
+
+@using (Html.BeginForm("HistorialMedico", "Reportes", FormMethod.Get))
+{
+    <div class="card mb-3">
+        <div class="card-body py-2">
+            <div class="row g-2 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label mb-1" style="font-size:12px;">ID Paciente</label>
+                    <input type="number" name="idPaciente" value="@ViewBag.IDPaciente" class="form-control form-control-sm" required />
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-search"></i> Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (tabla != null && tabla.Rows.Count > 0)
+{
+    <div class="card">
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Paciente</th>
+                        <th>Hospital</th>
+                        <th>Fecha Cita</th>
+                        <th>Medico</th>
+                        <th>Especialidad</th>
+                        <th>Diagnostico</th>
+                        <th>Estado Cita</th>
+                        <th>Tratamiento</th>
+                        <th>Costo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (DataRow row in tabla.Rows)
+                    {
+                        <tr>
+                            <td>@row["NombrePaciente"]</td>
+                            <td>@row["NombreHospital"]</td>
+                            <td>@Convert.ToDateTime(row["FechaHora"]).ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@row["NombreMedico"]</td>
+                            <td>@row["Especialidad"]</td>
+                            <td>@(row["Diagnostico"] == DBNull.Value ? "-" : row["Diagnostico"].ToString())</td>
+                            <td>@row["EstadoCita"]</td>
+                            <td>@(row["DescripcionTratamiento"] == DBNull.Value ? "-" : row["DescripcionTratamiento"].ToString())</td>
+                            <td>@(row["CostoTotal"] == DBNull.Value ? "-" : "₡" + string.Format("{0:N2}", row["CostoTotal"]))</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else if (ViewBag.IDPaciente > 0)
+{
+    <div class="alert alert-info">No se encontraron registros para este paciente.</div>
+}
