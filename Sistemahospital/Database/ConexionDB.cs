@@ -1,11 +1,12 @@
-﻿using System.Data.SqlClient;
+﻿using System.Configuration;
+using System.Data.SqlClient;
 
 namespace Sistemahospital.Database
 {
     public class ConexionDB
     {
         private readonly string _connectionString =
-            "Server=FRANKIE;Database=SistemaHospitales;Trusted_Connection=True;";
+            ConfigurationManager.ConnectionStrings["SistemaHospitalesDB"].ConnectionString;
 
         public SqlConnection ObtenerConexion()
         {
