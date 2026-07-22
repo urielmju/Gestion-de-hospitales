@@ -45,6 +45,17 @@ namespace Sistemahospital.Controllers
         [HttpPost]
         public ActionResult Pagar(int idPago, string metodoPago)
         {
+            if (Session["IDUsuario"] == null)
+                return RedirectToAction("Login", "Account");
+
+            int rol = Convert.ToInt32(Session["IDRol"].ToString());
+            if (rol == 1)
+            {
+                int idPaciente = Convert.ToInt32(Session["IDPaciente"]);
+                if (!_repo.PerteneceAPaciente(idPago, idPaciente))
+                    return RedirectToAction("Denegado", "Home");
+            }
+
             _repo.Pagar(idPago, metodoPago);
             TempData["Exito"] = "Pago registrado exitosamente.";
             return RedirectToAction("Pendientes");

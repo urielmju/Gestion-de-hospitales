@@ -1,0 +1,135 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crear cuenta - Sistema de Hospitales</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f2f5;
+        }
+
+        .registro-card {
+            max-width: 640px;
+            margin: 60px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .registro-header {
+            background-color: #0d6efd;
+            color: white;
+            border-radius: 10px 10px 0 0;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="card registro-card">
+        <div class="registro-header">
+            <h4>Crear cuenta</h4>
+            <small>Sistema de Gestion de Hospitales</small>
+        </div>
+        <div class="card-body p-4">
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">@ViewBag.Error</div>
+            }
+            @using (Html.BeginForm("Registro", "Account", FormMethod.Post, new { id = "formRegistro" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="mb-3">
+                    <label class="form-label">Tipo de cuenta</label>
+                    <select name="tipoCuenta" id="tipoCuenta" class="form-select" required>
+                        <option value="">Selecciona una opcion</option>
+                        <option value="paciente">Paciente</option>
+                        <option value="medico">Medico</option>
+                    </select>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" name="nombre" class="form-control" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Apellido</label>
+                        <input type="text" name="apellido" class="form-control" required />
+                    </div>
+
+                    <div class="col-md-6 campo-paciente">
+                        <label class="form-label">Fecha de nacimiento</label>
+                        <input type="date" name="fechaNacimiento" class="form-control" />
+                    </div>
+                    <div class="col-md-6 campo-paciente">
+                        <label class="form-label">Genero</label>
+                        <select name="genero" class="form-select">
+                            <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>
+                            <option value="O">Otro</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 campo-paciente">
+                        <label class="form-label">Direccion</label>
+                        <input type="text" name="direccion" class="form-control" />
+                    </div>
+
+                    <div class="col-md-12 campo-medico">
+                        <label class="form-label">Especialidad</label>
+                        <input type="text" name="especialidad" class="form-control" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Telefono</label>
+                        <input type="text" name="telefono" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-control" />
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label">Hospital</label>
+                        <select name="idHospital" class="form-select" required>
+                            <option value="1">Hospital Central San Jose</option>
+                            <option value="2">Hospital Metropolitano</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Usuario</label>
+                        <input type="text" name="username" class="form-control" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Contrasena</label>
+                        <input type="password" name="password" class="form-control" required />
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 mt-4">Crear cuenta</button>
+            }
+            <div class="text-center mt-3">
+                <a href="@Url.Action("Login", "Account")">Ya tengo cuenta, iniciar sesion</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var tipoCuenta = document.getElementById('tipoCuenta');
+        var camposPaciente = document.querySelectorAll('.campo-paciente');
+        var camposMedico = document.querySelectorAll('.campo-medico');
+
+        function actualizarCampos() {
+            var esPaciente = tipoCuenta.value === 'paciente';
+            var esMedico = tipoCuenta.value === 'medico';
+            camposPaciente.forEach(function (el) { el.style.display = esPaciente ? '' : 'none'; });
+            camposMedico.forEach(function (el) { el.style.display = esMedico ? '' : 'none'; });
+        }
+
+        tipoCuenta.addEventListener('change', actualizarCampos);
+        actualizarCampos();
+    </script>
+</body>
+</html>

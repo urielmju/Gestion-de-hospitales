@@ -26,36 +26,47 @@ namespace Sistemahospital.Controllers
             string filtroHospitalMedicos = "";
             string filtroHospitalCitas = "";
             string filtroHospitalPagos = "";
+            int? idHospitalFiltro = null;
 
             if (rol == 3 && Session["IDHospital"] != null)
             {
-                string idH = Session["IDHospital"].ToString();
-                filtroHospitalPacientes = " AND P.IDHospital = " + idH;
-                filtroHospitalMedicos = " AND M.IDHospital = " + idH;
-                filtroHospitalCitas = " AND C.IDHospital = " + idH;
-                filtroHospitalPagos = " AND PG.IDHospital = " + idH;
+                idHospitalFiltro = Convert.ToInt32(Session["IDHospital"]);
+                filtroHospitalPacientes = " AND P.IDHospital = @IDHospital";
+                filtroHospitalMedicos = " AND M.IDHospital = @IDHospital";
+                filtroHospitalCitas = " AND C.IDHospital = @IDHospital";
+                filtroHospitalPagos = " AND PG.IDHospital = @IDHospital";
             }
 
             using (var con = _db.ObtenerConexion())
             {
                 con.Open();
 
-                ViewBag.TotalPacientes = new SqlCommand(
-                    "SELECT COUNT(*) FROM PACIENTES P WHERE P.Estado='A'" + filtroHospitalPacientes, con).ExecuteScalar();
+                var cmdTotalPacientes = new SqlCommand(
+                    "SELECT COUNT(*) FROM PACIENTES P WHERE P.Estado='A'" + filtroHospitalPacientes, con);
+                var cmdTotalMedicos = new SqlCommand(
+                    "SELECT COUNT(*) FROM MEDICOS M WHERE M.Estado='A'" + filtroHospitalMedicos, con);
+                var cmdTotalCitas = new SqlCommand(
+                    "SELECT COUNT(*) FROM CITAS C WHERE C.Estado='P'" + filtroHospitalCitas, con);
+                var cmdTotalPagos = new SqlCommand(
+                    "SELECT COUNT(*) FROM PAGOS PG WHERE PG.Estado='P'" + filtroHospitalPagos, con);
 
-                ViewBag.TotalMedicos = new SqlCommand(
-                    "SELECT COUNT(*) FROM MEDICOS M WHERE M.Estado='A'" + filtroHospitalMedicos, con).ExecuteScalar();
+                if (idHospitalFiltro.HasValue)
+                {
+                    cmdTotalPacientes.Parameters.AddWithValue("@IDHospital", idHospitalFiltro.Value);
+                    cmdTotalMedicos.Parameters.AddWithValue("@IDHospital", idHospitalFiltro.Value);
+                    cmdTotalCitas.Parameters.AddWithValue("@IDHospital", idHospitalFiltro.Value);
+                    cmdTotalPagos.Parameters.AddWithValue("@IDHospital", idHospitalFiltro.Value);
+                }
 
-                ViewBag.TotalCitas = new SqlCommand(
-                    "SELECT COUNT(*) FROM CITAS C WHERE C.Estado='P'" + filtroHospitalCitas, con).ExecuteScalar();
-
-                ViewBag.TotalPagos = new SqlCommand(
-                    "SELECT COUNT(*) FROM PAGOS PG WHERE PG.Estado='P'" + filtroHospitalPagos, con).ExecuteScalar();
+                ViewBag.TotalPacientes = cmdTotalPacientes.ExecuteScalar();
+                ViewBag.TotalMedicos = cmdTotalMedicos.ExecuteScalar();
+                ViewBag.TotalCitas = cmdTotalCitas.ExecuteScalar();
+                ViewBag.TotalPagos = cmdTotalPagos.ExecuteScalar();
 
                 // proximas citas
                 var citas = new List<Cita>();
                 var sqlCitas = @"
-        SELECT TOP 5 C.IDCita, 
+        SELECT TOP 5 C.IDCita,
             P.Nombre + ' ' + P.Apellido AS NombrePaciente,
             M.Nombre + ' ' + M.Apellido AS NombreMedico,
             C.FechaHora, C.Estado
@@ -66,6 +77,8 @@ namespace Sistemahospital.Controllers
         ORDER BY C.FechaHora ASC";
 
                 var cmdCitas = new SqlCommand(sqlCitas, con);
+                if (idHospitalFiltro.HasValue)
+                    cmdCitas.Parameters.AddWithValue("@IDHospital", idHospitalFiltro.Value);
                 var rCitas = cmdCitas.ExecuteReader();
                 while (rCitas.Read())
                 {
@@ -95,6 +108,8 @@ namespace Sistemahospital.Controllers
         ORDER BY PG.Fecha DESC";
 
                 var cmdPagos = new SqlCommand(sqlPagos, con);
+                if (idHospitalFiltro.HasValue)
+                    cmdPagos.Parameters.AddWithValue("@IDHospital", idHospitalFiltro.Value);
                 var rPagos = cmdPagos.ExecuteReader();
                 while (rPagos.Read())
                 {

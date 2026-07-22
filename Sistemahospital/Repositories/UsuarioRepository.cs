@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using Sistemahospital.Database;
 using Sistemahospital.Models;
+using Sistemahospital.Seguridad;
 
 namespace Sistemahospital.Repositories
 {
@@ -15,20 +16,22 @@ namespace Sistemahospital.Repositories
             {
                 con.Open();
                 var cmd = new SqlCommand(@"
-                    SELECT U.IDUsuario, U.IDRol, R.NombreRol, U.IDHospital, 
-                           U.IDMedico, U.IDPaciente, U.Username, U.Email
+                    SELECT U.IDUsuario, U.IDRol, R.NombreRol, U.IDHospital,
+                           U.IDMedico, U.IDPaciente, U.Username, U.Email, U.PasswordHash
                     FROM USUARIOS U
                     INNER JOIN ROLES R ON U.IDRol = R.IDRol
-                    WHERE U.Username = @Username 
-                      AND U.PasswordHash = @Password
+                    WHERE U.Username = @Username
                       AND U.Estado = 'A'", con);
 
                 cmd.Parameters.AddWithValue("@Username", username);
-                cmd.Parameters.AddWithValue("@Password", password);
 
                 var reader = cmd.ExecuteReader();
                 if (reader.Read())
                 {
+                    var hash = reader["PasswordHash"].ToString();
+                    if (!HashContrasena.Verificar(password, hash))
+                        return null;
+
                     return new Usuario
                     {
                         IDUsuario = (int)reader["IDUsuario"],

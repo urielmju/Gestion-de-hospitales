@@ -7,10 +7,9 @@ using Sistemahospital.Database;
 using Sistemahospital.Models;
 using Sistemahospital.Filters;
 
-[RolAutorizado(3, 4)]
-public class ReportesController : Controller { }
 namespace Sistemahospital.Controllers
 {
+    [RolAutorizado(3, 4)]
     public class ReportesController : Controller
     {
         private readonly ConexionDB _db = new ConexionDB();

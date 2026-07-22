@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using Sistemahospital.Database;
 using Sistemahospital.Models;
+using Sistemahospital.Seguridad;
 
 namespace Sistemahospital.Repositories
 {
@@ -103,7 +104,7 @@ namespace Sistemahospital.Repositories
                     cmdUsuario.Parameters.AddWithValue("@IDHospital", m.IDHospital);
                     cmdUsuario.Parameters.AddWithValue("@IDMedico", idMedico);
                     cmdUsuario.Parameters.AddWithValue("@Username", username);
-                    cmdUsuario.Parameters.AddWithValue("@Password", password);
+                    cmdUsuario.Parameters.AddWithValue("@Password", HashContrasena.Generar(password));
                     cmdUsuario.Parameters.AddWithValue("@Email", (object)m.Email ?? DBNull.Value);
 
                     cmdUsuario.ExecuteNonQuery();

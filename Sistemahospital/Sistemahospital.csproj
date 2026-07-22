@@ -152,6 +152,7 @@
     <Compile Include="Repositories\PacienteRepository.cs" />
     <Compile Include="Repositories\PagoRepository.cs" />
     <Compile Include="Repositories\UsuarioRepository.cs" />
+    <Compile Include="Seguridad\HashContrasena.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-grid.css" />
@@ -205,6 +206,7 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Registro.cshtml" />
     <Content Include="Views\Pacientes\Index.cshtml" />
     <Content Include="Views\Pacientes\Crear.cshtml" />
     <Content Include="Views\Pacientes\Editar.cshtml" />

@@ -2,10 +2,10 @@
 using System.Web.Mvc;
 using Sistemahospital.Repositories;
 using Sistemahospital.Filters;
-[RolAutorizado(2, 3, 4)]
-public class CitasController : Controller { }
+
 namespace Sistemahospital.Controllers
 {
+    [RolAutorizado(2, 3, 4)]
     public class CitasController : Controller
     {
         private readonly CitaRepository _repo = new CitaRepository();

@@ -36,6 +36,7 @@
         <div class="card-body p-4">
             @using (Html.BeginForm("Login", "Account", FormMethod.Post))
             {
+                @Html.AntiForgeryToken()
                 if (ViewBag.Error != null)
                 {
                     <div class="alert alert-danger">@ViewBag.Error</div>
@@ -50,6 +51,9 @@
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Iniciar Sesion</button>
             }
+            <div class="text-center mt-3">
+                <a href="@Url.Action("Registro", "Account")">Crear cuenta nueva</a>
+            </div>
         </div>
     </div>
 </body>

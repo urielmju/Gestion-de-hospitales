@@ -133,6 +133,19 @@ namespace Sistemahospital.Repositories
             return lista;
         }
 
+        public bool PerteneceAPaciente(int idPago, int idPaciente)
+        {
+            using (var con = _db.ObtenerConexion())
+            {
+                con.Open();
+                var cmd = new SqlCommand(
+                    "SELECT COUNT(*) FROM PAGOS WHERE IDPago = @IDPago AND IDPaciente = @IDPaciente", con);
+                cmd.Parameters.AddWithValue("@IDPago", idPago);
+                cmd.Parameters.AddWithValue("@IDPaciente", idPaciente);
+                return (int)cmd.ExecuteScalar() > 0;
+            }
+        }
+
         public void Pagar(int idPago, string metodoPago)
         {
             using (var con = _db.ObtenerConexion())

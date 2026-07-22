@@ -3,10 +3,10 @@ using Sistemahospital.Repositories;
 using System;
 using System.Web.Mvc;
 using Sistemahospital.Filters;
-[RolAutorizado(3, 4)]
-public class MedicosController : Controller { }
+
 namespace Sistemahospital.Controllers
 {
+    [RolAutorizado(3, 4)]
     public class MedicosController : Controller
     {
         private readonly MedicoRepository _repo = new MedicoRepository();
