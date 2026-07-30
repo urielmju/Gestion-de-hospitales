@@ -25,8 +25,7 @@ namespace Sistemahospital.Controllers
         {
             if (Session["IDUsuario"] == null)
                 return RedirectToAction("Login", "Account");
-            ViewBag.Pacientes = _repoPaciente.ObtenerTodos();
-            ViewBag.Medicos = _repoMedico.ObtenerTodos();
+            CargarListasParaCita();
             return View();
         }
 
@@ -36,6 +35,10 @@ namespace Sistemahospital.Controllers
         {
             try
             {
+                int rol = Convert.ToInt32(Session["IDRol"].ToString());
+                if (rol != 4 && Session["IDHospital"] != null)
+                    idHospital = Convert.ToInt32(Session["IDHospital"]);
+
                 _repo.Crear(idPaciente, idMedico, idHospital, fechaHora);
                 TempData["Exito"] = "Cita registrada exitosamente.";
                 return RedirectToAction("Index");
@@ -43,10 +46,23 @@ namespace Sistemahospital.Controllers
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
-                ViewBag.Pacientes = _repoPaciente.ObtenerTodos();
-                ViewBag.Medicos = _repoMedico.ObtenerTodos();
+                CargarListasParaCita();
                 return View();
             }
+        }
+
+        private void CargarListasParaCita()
+        {
+            int rol = Convert.ToInt32(Session["IDRol"].ToString());
+            int? idHospitalSesion = (rol != 4 && Session["IDHospital"] != null)
+                ? (int?)Convert.ToInt32(Session["IDHospital"])
+                : null;
+
+            ViewBag.Pacientes = _repoPaciente.ObtenerTodos(idHospitalSesion);
+            ViewBag.Medicos = idHospitalSesion.HasValue
+                ? _repoMedico.ObtenerTodos().FindAll(m => m.IDHospital == idHospitalSesion.Value)
+                : _repoMedico.ObtenerTodos();
+            ViewBag.IDHospitalFijo = idHospitalSesion;
         }
 
         public ActionResult Editar(int id)

@@ -39,14 +39,24 @@
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Hospital</label>
-                    <select name="idHospital" class="form-select">
-                        <option value="1">Hospital Central San Jose</option>
-                        <option value="2">Hospital Metropolitano</option>
-                    </select>
+                    @if (ViewBag.IDHospitalFijo != null)
+                    {
+                        <input type="hidden" name="idHospital" value="@ViewBag.IDHospitalFijo" />
+                        <input type="text" class="form-control" disabled
+                               value="@(ViewBag.IDHospitalFijo == 1 ? "Hospital Central San Jose" : "Hospital Metropolitano")" />
+                    }
+                    else
+                    {
+                        <select name="idHospital" class="form-select">
+                            <option value="1">Hospital Central San Jose</option>
+                            <option value="2">Hospital Metropolitano</option>
+                        </select>
+                    }
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Fecha y Hora</label>
-                    <input type="datetime-local" name="fechaHora" class="form-control" required />
+                    <input type="datetime-local" name="fechaHora" class="form-control" step="1800" required />
+                    <small class="text-muted">Cupos cada 30 minutos, de 7:00 a.m. a 5:00 p.m.</small>
                 </div>
             </div>
             <div class="mt-3">

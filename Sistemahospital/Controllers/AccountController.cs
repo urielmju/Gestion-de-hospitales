@@ -43,7 +43,7 @@ namespace Sistemahospital.Controllers
                 case 1:
                     return RedirectToAction("MiHistorial", "Pacientes");
                 case 5:
-                    return RedirectToAction("Index", "Pacientes");
+                    return RedirectToAction("Index", "Home");
                 case 6:
                     return RedirectToAction("Index", "Medicamentos");
                 default:
