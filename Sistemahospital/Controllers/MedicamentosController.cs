@@ -4,7 +4,7 @@ using Sistemahospital.Filters;
 
 namespace Sistemahospital.Controllers
 {
-    [RolAutorizado(3, 4)]
+    [RolAutorizado(3, 4, 6)]
     public class MedicamentosController : Controller
     {
         private readonly MedicamentoRepository _repo = new MedicamentoRepository();

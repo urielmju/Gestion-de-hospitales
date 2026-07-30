@@ -9,11 +9,11 @@ using Sistemahospital.Filters;
 
 namespace Sistemahospital.Controllers
 {
-    [RolAutorizado(3, 4)]
     public class ReportesController : Controller
     {
         private readonly ConexionDB _db = new ConexionDB();
 
+        [RolAutorizado(3, 4, 6)]
         public ActionResult Index()
         {
             if (Session["IDUsuario"] == null)
@@ -22,6 +22,7 @@ namespace Sistemahospital.Controllers
         }
 
         [HttpPost]
+        [RolAutorizado(3, 4)]
         public ActionResult PacientesPorMedico(int idMedico, int idHospital, DateTime fechaInicio, DateTime fechaFin)
         {
             var lista = new List<Cita>();
@@ -54,6 +55,7 @@ namespace Sistemahospital.Controllers
         }
 
         [HttpPost]
+        [RolAutorizado(3, 4)]
         public ActionResult PagosPaciente(int idPaciente, DateTime fechaInicio, DateTime fechaFin)
         {
             var lista = new List<Pago>();
@@ -98,6 +100,7 @@ namespace Sistemahospital.Controllers
             return View("Index");
         }
 
+        [RolAutorizado(3, 4, 6)]
         public ActionResult StockBajo(int idHospital = 1, int stockMinimo = 100)
         {
             if (Session["IDUsuario"] == null)
@@ -122,6 +125,7 @@ namespace Sistemahospital.Controllers
             return View();
         }
 
+        [RolAutorizado(3, 4)]
         public ActionResult HistorialMedico(int idPaciente = 0)
         {
             if (Session["IDUsuario"] == null)

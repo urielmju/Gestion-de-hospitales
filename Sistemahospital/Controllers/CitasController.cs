@@ -12,6 +12,7 @@ namespace Sistemahospital.Controllers
         private readonly PacienteRepository _repoPaciente = new PacienteRepository();
         private readonly MedicoRepository _repoMedico = new MedicoRepository();
 
+        [RolAutorizado(2, 3, 4, 5)]
         public ActionResult Index()
         {
             if (Session["IDUsuario"] == null)
@@ -19,6 +20,7 @@ namespace Sistemahospital.Controllers
             return View(_repo.ObtenerTodos());
         }
 
+        [RolAutorizado(2, 3, 4, 5)]
         public ActionResult Crear()
         {
             if (Session["IDUsuario"] == null)
@@ -29,6 +31,7 @@ namespace Sistemahospital.Controllers
         }
 
         [HttpPost]
+        [RolAutorizado(2, 3, 4, 5)]
         public ActionResult Crear(int idPaciente, int idMedico, int idHospital, DateTime fechaHora)
         {
             try
