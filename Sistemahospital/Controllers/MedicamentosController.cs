@@ -20,6 +20,7 @@ namespace Sistemahospital.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult ActualizarStock(int idMedicamento, int idHospital, int cantidad)
         {
             _repo.ActualizarStock(idMedicamento, idHospital, cantidad);
@@ -29,6 +30,7 @@ namespace Sistemahospital.Controllers
 
         [RolAutorizado(6)]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult AgregarStock(int idMedicamento, int idHospital, int cantidad)
         {
             if (cantidad > 0)
@@ -46,6 +48,7 @@ namespace Sistemahospital.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [RolAutorizado(6)]
         public ActionResult Crear(Medicamento m, int idHospital, int cantidadInicial)
         {

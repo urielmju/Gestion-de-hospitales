@@ -26,6 +26,7 @@ namespace Sistemahospital.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Crear(Medico m, string username, string password)
         {
             try
@@ -49,12 +50,15 @@ namespace Sistemahospital.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Editar(Medico m)
         {
             _repo.Editar(m);
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Eliminar(int id)
         {
             _repo.Eliminar(id);

@@ -41,7 +41,11 @@
                         <td>@m.NombreHospital</td>
                         <td>
                             <a href="@Url.Action("Editar", new { id = m.IDMedico })" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
-                            <a href="@Url.Action("Eliminar", new { id = m.IDMedico })" class="btn btn-danger btn-sm" onclick="return confirm('Desea eliminar este medico?')"><i class="fas fa-trash"></i></a>
+                            @using (Html.BeginForm("Eliminar", "Medicos", new { id = m.IDMedico }, FormMethod.Post, new { style = "display:inline;" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Desea eliminar este medico?')"><i class="fas fa-trash"></i></button>
+                            }
                         </td>
                     </tr>
                 }

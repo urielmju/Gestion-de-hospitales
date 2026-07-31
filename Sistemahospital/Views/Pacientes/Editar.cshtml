@@ -12,6 +12,7 @@
     <div class="card-body">
         @using (Html.BeginForm("Editar", "Pacientes", FormMethod.Post))
         {
+            @Html.AntiForgeryToken()
             <input type="hidden" name="IDPaciente" value="@Model.IDPaciente" />
             <div class="row g-3">
                 <div class="col-md-6">

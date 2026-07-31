@@ -17,6 +17,7 @@
     <div class="card-body">
         @using (Html.BeginForm("Crear", "Medicamentos", FormMethod.Post))
         {
+            @Html.AntiForgeryToken()
             <div class="row g-3">
                 <div class="col-md-6">
                     <label class="form-label">Nombre</label>

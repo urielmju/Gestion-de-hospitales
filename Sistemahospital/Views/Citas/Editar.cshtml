@@ -22,6 +22,7 @@
         </div>
         @using (Html.BeginForm("Editar", "Citas", FormMethod.Post))
         {
+            @Html.AntiForgeryToken()
             <input type="hidden" name="idCita" value="@Model.IDCita" />
             <div class="row g-3">
                 <div class="col-md-6">

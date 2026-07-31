@@ -30,6 +30,7 @@ namespace Sistemahospital.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [RolAutorizado(2, 3, 4, 5)]
         public ActionResult Crear(int idPaciente, int idMedico, int idHospital, DateTime fechaHora)
         {
@@ -73,12 +74,15 @@ namespace Sistemahospital.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Editar(int idCita, string estado, string diagnostico)
         {
             _repo.ActualizarEstado(idCita, estado, diagnostico);
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Cancelar(int id)
         {
             _repo.Cancelar(id);

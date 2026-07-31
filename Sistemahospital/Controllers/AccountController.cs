@@ -59,8 +59,7 @@ namespace Sistemahospital.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Registro(string tipoCuenta, string username, string password,
-            string nombre, string apellido, int idHospital, string telefono, string email,
-            DateTime? fechaNacimiento, string genero, string direccion, string especialidad)
+            string nombre, string apellido, int idHospital, string email)
         {
             try
             {
@@ -77,10 +76,7 @@ namespace Sistemahospital.Controllers
                         IDHospital = idHospital,
                         Nombre = nombre,
                         Apellido = apellido,
-                        FechaNacimiento = fechaNacimiento ?? DateTime.Now,
-                        Genero = genero,
-                        Direccion = direccion,
-                        Telefono = telefono,
+                        FechaNacimiento = DateTime.Now,
                         Email = email
                     };
                     _repoPaciente.Crear(paciente, username, password);
@@ -92,8 +88,7 @@ namespace Sistemahospital.Controllers
                         IDHospital = idHospital,
                         Nombre = nombre,
                         Apellido = apellido,
-                        Especialidad = especialidad,
-                        Telefono = telefono,
+                        Especialidad = "General",
                         Email = email
                     };
                     _repoMedico.Crear(medico, username, password);

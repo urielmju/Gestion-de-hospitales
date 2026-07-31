@@ -77,7 +77,7 @@ namespace Sistemahospital.Repositories
                     cmdPaciente.Parameters.AddWithValue("@Nombre", p.Nombre);
                     cmdPaciente.Parameters.AddWithValue("@Apellido", p.Apellido);
                     cmdPaciente.Parameters.AddWithValue("@FechaNacimiento", p.FechaNacimiento);
-                    cmdPaciente.Parameters.AddWithValue("@Genero", p.Genero);
+                    cmdPaciente.Parameters.AddWithValue("@Genero", (object)p.Genero ?? DBNull.Value);
                     cmdPaciente.Parameters.AddWithValue("@Direccion", (object)p.Direccion ?? DBNull.Value);
                     cmdPaciente.Parameters.AddWithValue("@Telefono", (object)p.Telefono ?? DBNull.Value);
                     cmdPaciente.Parameters.AddWithValue("@Email", (object)p.Email ?? DBNull.Value);
@@ -121,7 +121,7 @@ namespace Sistemahospital.Repositories
                 cmd.Parameters.AddWithValue("@Nombre", p.Nombre);
                 cmd.Parameters.AddWithValue("@Apellido", p.Apellido);
                 cmd.Parameters.AddWithValue("@FechaNacimiento", p.FechaNacimiento);
-                cmd.Parameters.AddWithValue("@Genero", p.Genero);
+                cmd.Parameters.AddWithValue("@Genero", (object)p.Genero ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@Direccion", (object)p.Direccion ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@Telefono", (object)p.Telefono ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@Email", (object)p.Email ?? DBNull.Value);

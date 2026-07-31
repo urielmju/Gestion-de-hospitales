@@ -61,7 +61,11 @@
                             @if (c.Estado == "P")
                             {
                                 <a href="@Url.Action("Editar", new { id = c.IDCita })" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
-                                <a href="@Url.Action("Cancelar", new { id = c.IDCita })" class="btn btn-danger btn-sm" onclick="return confirm('Desea cancelar esta cita?')"><i class="fas fa-times"></i></a>
+                                @using (Html.BeginForm("Cancelar", "Citas", new { id = c.IDCita }, FormMethod.Post, new { style = "display:inline;" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Desea cancelar esta cita?')"><i class="fas fa-times"></i></button>
+                                }
                             }
                         </td>
                     </tr>

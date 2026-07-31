@@ -38,6 +38,7 @@ namespace Sistemahospital.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [RolAutorizado(3, 4, 5)]
         public ActionResult Crear(Paciente p, string username, string password)
         {
@@ -63,6 +64,7 @@ namespace Sistemahospital.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [RolAutorizado(3, 4, 5)]
         public ActionResult Editar(Paciente p)
         {
@@ -70,6 +72,8 @@ namespace Sistemahospital.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Eliminar(int id)
         {
             _repo.Eliminar(id);
