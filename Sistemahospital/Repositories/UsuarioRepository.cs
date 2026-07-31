@@ -47,5 +47,27 @@ namespace Sistemahospital.Repositories
                 return null;
             }
         }
+
+        public void CrearStaff(int idRol, int idHospital, string nombre, string apellido,
+            string username, string password, string email)
+        {
+            using (var con = _db.ObtenerConexion())
+            {
+                con.Open();
+                var cmd = new SqlCommand(@"
+                    INSERT INTO USUARIOS (IDRol, IDHospital, Nombre, Apellido, Username, PasswordHash, Email, FechaCreacion, Estado)
+                    VALUES (@IDRol, @IDHospital, @Nombre, @Apellido, @Username, @Password, @Email, GETDATE(), 'A')", con);
+
+                cmd.Parameters.AddWithValue("@IDRol", idRol);
+                cmd.Parameters.AddWithValue("@IDHospital", idHospital);
+                cmd.Parameters.AddWithValue("@Nombre", nombre);
+                cmd.Parameters.AddWithValue("@Apellido", apellido);
+                cmd.Parameters.AddWithValue("@Username", username);
+                cmd.Parameters.AddWithValue("@Password", HashContrasena.Generar(password));
+                cmd.Parameters.AddWithValue("@Email", (object)email ?? DBNull.Value);
+
+                cmd.ExecuteNonQuery();
+            }
+        }
     }
 }

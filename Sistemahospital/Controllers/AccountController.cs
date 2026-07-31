@@ -98,6 +98,14 @@ namespace Sistemahospital.Controllers
                     };
                     _repoMedico.Crear(medico, username, password);
                 }
+                else if (tipoCuenta == "recepcionista")
+                {
+                    _repo.CrearStaff(5, idHospital, nombre, apellido, username, password, email);
+                }
+                else if (tipoCuenta == "farmaceutico")
+                {
+                    _repo.CrearStaff(6, idHospital, nombre, apellido, username, password, email);
+                }
                 else
                 {
                     ViewBag.Error = "Tipo de cuenta invalido.";

@@ -272,6 +272,18 @@
             <a href="@Url.Action("Index", "Medicamentos")"><i class="fas fa-pills"></i> Medicamentos</a>
             <a href="@Url.Action("Index", "Reportes")"><i class="fas fa-chart-bar"></i> Reportes</a>
         }
+        @if (rolBar == 5)
+        {
+            <a href="@Url.Action("Index", "Home")"><i class="fas fa-home"></i> Inicio</a>
+            <a href="@Url.Action("Index", "Pacientes")"><i class="fas fa-users"></i> Pacientes</a>
+            <a href="@Url.Action("Index", "Citas")"><i class="fas fa-calendar-alt"></i> Citas</a>
+            <a href="@Url.Action("Pendientes", "Pagos")"><i class="fas fa-dollar-sign"></i> Cobrar</a>
+        }
+        @if (rolBar == 6)
+        {
+            <a href="@Url.Action("Index", "Medicamentos")"><i class="fas fa-pills"></i> Medicamentos</a>
+            <a href="@Url.Action("StockBajo", "Reportes")"><i class="fas fa-exclamation-triangle"></i> Stock Bajo</a>
+        }
     </div>
 
     <!-- sidebar -->
@@ -327,9 +339,29 @@
             <a href="@Url.Action("Index", "Reportes")"><i class="fas fa-chart-line"></i> Reportes</a>
             <a href="@Url.Action("StockBajo", "Reportes")"><i class="fas fa-exclamation-triangle"></i> Stock Bajo</a>
             <a href="@Url.Action("HistorialMedico", "Reportes")"><i class="fas fa-file-medical"></i> Historial Medico</a>
+        }
 
-            <div class="menu-section">Sistema</div>
-            <a href="@Url.Action("Index", "Auditoria")"><i class="fas fa-shield-alt"></i> Auditoria</a>
+        @if (rol == 5)
+        {
+            <div class="menu-section">Dashboard</div>
+            <a href="@Url.Action("Index", "Home")"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+
+            <div class="menu-section">Recepcion</div>
+            <a href="@Url.Action("Index", "Pacientes")"><i class="fas fa-user-injured"></i> Pacientes</a>
+            <a href="@Url.Action("Crear", "Pacientes")"><i class="fas fa-user-plus"></i> Ingresar Paciente</a>
+            <a href="@Url.Action("Index", "Citas")"><i class="fas fa-calendar-check"></i> Citas</a>
+            <a href="@Url.Action("Crear", "Citas")"><i class="fas fa-calendar-plus"></i> Asignar Cita</a>
+
+            <div class="menu-section">Cobros</div>
+            <a href="@Url.Action("Pendientes", "Pagos")"><i class="fas fa-file-invoice-dollar"></i> Cobrar Pagos</a>
+            <a href="@Url.Action("Index", "Pagos")"><i class="fas fa-list"></i> Historial Pagos</a>
+        }
+
+        @if (rol == 6)
+        {
+            <div class="menu-section">Farmacia</div>
+            <a href="@Url.Action("Index", "Medicamentos")"><i class="fas fa-pills"></i> Medicamentos</a>
+            <a href="@Url.Action("StockBajo", "Reportes")"><i class="fas fa-exclamation-triangle"></i> Stock Bajo</a>
         }
     </div>
 
