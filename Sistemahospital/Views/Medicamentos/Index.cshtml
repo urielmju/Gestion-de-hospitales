@@ -1,6 +1,7 @@
 ﻿@model List<Sistemahospital.Models.Medicamento>
 @{
     ViewBag.Title = "Medicamentos";
+    var esFarmaceutico = Session["IDRol"] != null && Convert.ToInt32(Session["IDRol"]) == 6;
 }
 
 <div class="page-header d-flex justify-content-between align-items-center">
@@ -8,13 +9,17 @@
         <h4><i class="fas fa-pills"></i> Inventario de Medicamentos</h4>
         <small>Stock por hospital</small>
     </div>
-    <div>
+    <div class="d-flex gap-2 align-items-center">
         @using (Html.BeginForm("Index", "Medicamentos", FormMethod.Get))
         {
             <select name="idHospital" class="form-select form-select-sm d-inline w-auto" onchange="this.form.submit()">
                 <option value="1" @(ViewBag.IDHospital == 1 ? "selected" : "")>Hospital Central San Jose</option>
                 <option value="2" @(ViewBag.IDHospital == 2 ? "selected" : "")>Hospital Metropolitano</option>
             </select>
+        }
+        @if (esFarmaceutico)
+        {
+            <a href="@Url.Action("Crear")" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Nuevo Medicamento</a>
         }
     </div>
 </div>
@@ -36,6 +41,10 @@
                     <th>Unidad</th>
                     <th>Stock</th>
                     <th>Actualizar Stock</th>
+                    @if (esFarmaceutico)
+                    {
+                        <th>Agregar Stock</th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -70,6 +79,18 @@
                                 <button type="submit" class="btn btn-primary btn-sm ms-1"><i class="fas fa-save"></i></button>
                             }
                         </td>
+                        @if (esFarmaceutico)
+                        {
+                            <td>
+                                @using (Html.BeginForm("AgregarStock", "Medicamentos", FormMethod.Post, new { style = "display:inline;" }))
+                                {
+                                    <input type="hidden" name="idMedicamento" value="@m.IDMedicamento" />
+                                    <input type="hidden" name="idHospital" value="@ViewBag.IDHospital" />
+                                    <input type="number" name="cantidad" value="0" class="form-control form-control-sm d-inline" style="width:80px;" min="1" />
+                                    <button type="submit" class="btn btn-success btn-sm ms-1"><i class="fas fa-plus"></i></button>
+                                }
+                            </td>
+                        }
                     </tr>
                 }
             </tbody>

@@ -1,0 +1,55 @@
+@model Sistemahospital.Models.Medicamento
+@{
+    ViewBag.Title = "Nuevo Medicamento";
+}
+
+<div class="page-header">
+    <h4><i class="fas fa-pills"></i> Registrar Nuevo Medicamento</h4>
+    <small><a href="@Url.Action("Index")">Medicamentos</a> / Nuevo</small>
+</div>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<div class="card" style="max-width:700px;">
+    <div class="card-body">
+        @using (Html.BeginForm("Crear", "Medicamentos", FormMethod.Post))
+        {
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" name="Nombre" class="form-control" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Unidad de Medida</label>
+                    <input type="text" name="UnidadMedida" class="form-control" placeholder="ej: tableta, ml, caja" />
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">Descripcion</label>
+                    <input type="text" name="Descripcion" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Costo por Unidad (₡)</label>
+                    <input type="number" name="CostoPorUnidad" class="form-control" step="0.01" min="0" required />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Hospital</label>
+                    <select name="idHospital" class="form-select" required>
+                        <option value="1">Hospital Central San Jose</option>
+                        <option value="2">Hospital Metropolitano</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Stock Inicial</label>
+                    <input type="number" name="cantidadInicial" class="form-control" min="0" value="0" required />
+                </div>
+            </div>
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+                <a href="@Url.Action("Index")" class="btn btn-secondary">Cancelar</a>
+            </div>
+        }
+    </div>
+</div>

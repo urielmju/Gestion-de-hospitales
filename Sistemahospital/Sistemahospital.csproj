@@ -219,6 +219,7 @@
     <Content Include="Views\Pagos\Index.cshtml" />
     <Content Include="Views\Pagos\Pendientes.cshtml" />
     <Content Include="Views\Medicamentos\Index.cshtml" />
+    <Content Include="Views\Medicamentos\Crear.cshtml" />
     <Content Include="Views\Reportes\Index.cshtml" />
     <Content Include="Views\Reportes\StockBajo.cshtml" />
     <Content Include="Views\Reportes\HistorialMedico.cshtml" />
