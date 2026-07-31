@@ -17,11 +17,30 @@ namespace Sistemahospital.Controllers
             return View();
         }
 
+        private static string _ultimoError = "(sin errores registrados todavia)";
+
+        public ActionResult UltimoError()
+        {
+            return Content(_ultimoError, "text/plain");
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Login(string username, string password)
         {
-            var usuario = _repo.Login(username, password);
+            Usuario usuario;
+            try
+            {
+                usuario = _repo.Login(username, password);
+            }
+            catch (Exception ex)
+            {
+                _ultimoError = string.Format("{0:yyyy-MM-dd HH:mm:ss} UTC{1}{2}",
+                    DateTime.UtcNow, Environment.NewLine, ex.ToString());
+                ViewBag.Error = "La base de datos esta reactivandose, intenta de nuevo en unos segundos.";
+                return View();
+            }
+
             if (usuario == null)
             {
                 ViewBag.Error = "Usuario o contrasena incorrectos.";
