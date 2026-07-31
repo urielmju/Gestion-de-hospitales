@@ -5,14 +5,14 @@ using Sistemahospital.Filters;
 
 namespace Sistemahospital.Controllers
 {
-    [RolAutorizado(2, 3, 4)]
+    [RolAutorizado(2, 3)]
     public class CitasController : Controller
     {
         private readonly CitaRepository _repo = new CitaRepository();
         private readonly PacienteRepository _repoPaciente = new PacienteRepository();
         private readonly MedicoRepository _repoMedico = new MedicoRepository();
 
-        [RolAutorizado(2, 3, 4, 5)]
+        [RolAutorizado(2, 3, 5)]
         public ActionResult Index()
         {
             if (Session["IDUsuario"] == null)
@@ -20,7 +20,7 @@ namespace Sistemahospital.Controllers
             return View(_repo.ObtenerTodos());
         }
 
-        [RolAutorizado(2, 3, 4, 5)]
+        [RolAutorizado(2, 3, 5)]
         public ActionResult Crear()
         {
             if (Session["IDUsuario"] == null)
@@ -31,7 +31,7 @@ namespace Sistemahospital.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [RolAutorizado(2, 3, 4, 5)]
+        [RolAutorizado(2, 3, 5)]
         public ActionResult Crear(int idPaciente, int idMedico, int idHospital, DateTime fechaHora)
         {
             try

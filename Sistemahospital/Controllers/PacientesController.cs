@@ -44,6 +44,9 @@ namespace Sistemahospital.Controllers
         {
             try
             {
+                if (p.FechaNacimiento == default(DateTime))
+                    p.FechaNacimiento = DateTime.Now;
+
                 _repo.Crear(p, username, password);
                 TempData["Exito"] = "Paciente registrado exitosamente.";
                 return RedirectToAction("Index");

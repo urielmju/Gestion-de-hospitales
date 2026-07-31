@@ -7,7 +7,7 @@ namespace Sistemahospital
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            // temporalmente desactivado para diagnostico: filters.Add(new HandleErrorAttribute());
+            filters.Add(new HandleErrorAttribute());
         }
     }
 }
