@@ -21,11 +21,15 @@ namespace Sistemahospital.Controllers
 
         public ActionResult UltimoError()
         {
-            return Content(_ultimoError, "text/plain");
+            var texto = "LOGIN:" + Environment.NewLine + _ultimoError
+                + Environment.NewLine + Environment.NewLine
+                + "GLOBAL:" + Environment.NewLine + DiagnosticoError.Ultimo;
+            return Content(texto, "text/plain");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
         public ActionResult Login(string username, string password)
         {
             Usuario usuario;

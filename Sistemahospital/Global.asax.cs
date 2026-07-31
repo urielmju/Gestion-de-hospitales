@@ -9,6 +9,11 @@ using System.Web.Routing;
 
 namespace Sistemahospital
 {
+    public static class DiagnosticoError
+    {
+        public static string Ultimo = "(sin errores registrados todavia)";
+    }
+
     public class MvcApplication : System.Web.HttpApplication
     {
         protected void Application_Start()
@@ -30,6 +35,8 @@ namespace Sistemahospital
                 DateTime.UtcNow, Environment.NewLine,
                 Request?.Url, ex.ToString(),
                 new string('-', 60));
+
+            DiagnosticoError.Ultimo = texto;
 
             var home = Environment.GetEnvironmentVariable("HOME");
             if (!string.IsNullOrEmpty(home))
