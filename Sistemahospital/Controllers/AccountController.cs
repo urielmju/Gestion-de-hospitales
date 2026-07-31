@@ -17,16 +17,6 @@ namespace Sistemahospital.Controllers
             return View();
         }
 
-        private static string _ultimoError = "(sin errores registrados todavia)";
-
-        public ActionResult UltimoError()
-        {
-            var texto = "LOGIN:" + Environment.NewLine + _ultimoError
-                + Environment.NewLine + Environment.NewLine
-                + "GLOBAL:" + Environment.NewLine + DiagnosticoError.Ultimo;
-            return Content(texto, "text/plain");
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
@@ -37,10 +27,8 @@ namespace Sistemahospital.Controllers
             {
                 usuario = _repo.Login(username, password);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _ultimoError = string.Format("{0:yyyy-MM-dd HH:mm:ss} UTC{1}{2}",
-                    DateTime.UtcNow, Environment.NewLine, ex.ToString());
                 ViewBag.Error = "La base de datos esta reactivandose, intenta de nuevo en unos segundos.";
                 return View();
             }
