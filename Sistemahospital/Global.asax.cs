@@ -25,15 +25,39 @@ namespace Sistemahospital
             if (ex == null)
                 return;
 
+            var texto = string.Format(
+                "{0:yyyy-MM-dd HH:mm:ss} UTC{1}URL: {2}{1}{3}{1}{4}{1}",
+                DateTime.UtcNow, Environment.NewLine,
+                Request?.Url, ex.ToString(),
+                new string('-', 60));
+
+            var home = Environment.GetEnvironmentVariable("HOME");
+            if (!string.IsNullOrEmpty(home))
+            {
+                try
+                {
+                    var ruta = Path.Combine(home, "LogFiles", "error_log.txt");
+                    File.AppendAllText(ruta, texto + Environment.NewLine);
+                    return;
+                }
+                catch
+                {
+                }
+            }
+
             try
             {
                 var ruta = Server.MapPath("~/App_Data/error_log.txt");
-                var texto = string.Format(
-                    "{0:yyyy-MM-dd HH:mm:ss} UTC{1}URL: {2}{1}{3}{1}{4}{1}",
-                    DateTime.UtcNow, Environment.NewLine,
-                    Request?.Url, ex.ToString(),
-                    new string('-', 60));
                 File.AppendAllText(ruta, texto + Environment.NewLine);
+                return;
+            }
+            catch
+            {
+            }
+
+            try
+            {
+                System.Diagnostics.EventLog.WriteEntry("Sistemahospital", texto, System.Diagnostics.EventLogEntryType.Error);
             }
             catch
             {
